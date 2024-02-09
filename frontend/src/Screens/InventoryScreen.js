@@ -242,7 +242,14 @@ function InventoryScreen({ onLogout }) {
                     </a>
                   </li>
                   <li className="scroll-to-section">
-                    <a href="/">POS</a>
+                    <a
+                      href="#pos"
+                      onClick={() => {
+                        navigate("/pos");
+                      }}
+                    >
+                      POS
+                    </a>
                   </li>
                   <li className="scroll-to-section">
                     <a
@@ -253,6 +260,16 @@ function InventoryScreen({ onLogout }) {
                       className="active"
                     >
                       Inventory
+                    </a>
+                  </li>
+                  <li className="scroll-to-section">
+                    <a
+                      href="#transactions"
+                      onClick={() => {
+                        navigate("/transactions");
+                      }}
+                    >
+                      Transactions
                     </a>
                   </li>
                   <li className="scroll-to-section">

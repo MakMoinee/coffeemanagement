@@ -8,6 +8,8 @@ import {
   Navigate,
 } from "react-router-dom";
 import InventoryScreen from "./Screens/InventoryScreen";
+import PosScreen from "./Screens/PosScreen";
+import TransactionScreen from "./Screens/TransactionScreen";
 
 function App() {
   const initialLoginStatus = localStorage.getItem("isLoggedIn") === "true"; // Corrected the comparison
@@ -54,6 +56,26 @@ function App() {
           element={
             isLoggedIn ? (
               <InventoryScreen onLogout={handleLogout} />
+            ) : (
+              <Navigate to="/" />
+            )
+          }
+        />
+        <Route
+          path="/pos"
+          element={
+            isLoggedIn ? (
+              <PosScreen onLogout={handleLogout} />
+            ) : (
+              <Navigate to="/" />
+            )
+          }
+        />
+        <Route
+          path="/transactions"
+          element={
+            isLoggedIn ? (
+              <TransactionScreen onLogout={handleLogout} />
             ) : (
               <Navigate to="/" />
             )

@@ -310,6 +310,65 @@ const updateProduct = (
   });
 };
 
+const addTransaction = (productNames, totalAmount, cash, change) => {
+  return new Promise((resolve, reject) => {
+    pool
+      .connect()
+      .then((client) => {
+        const query =
+          "INSERT INTO transactions (items, total, cash, change_amount, transaction_date) VALUES ($1, $2, $3, $4, NOW())";
+
+        return client
+          .query(query, [productNames, totalAmount, cash, change])
+          .then((result) => {
+            client.release(); // Release the client
+            console.log("Product added to the database");
+            resolve(result); // Resolve the promise
+          })
+          .catch((error) => {
+            client.release(); // Release the client
+            console.error("Error adding product:", error);
+            reject(error); // Reject the promise with the error
+          });
+      })
+      .catch((error) => {
+        console.error("Error connecting to the database:", error);
+        reject(error); // Reject the promise with the error
+      });
+  });
+};
+
+const fetchTransactions = () => {
+    return new Promise((resolve, reject) => {
+      pool.connect((err, client, release) => {
+        if (err) {
+          console.error("Error connecting to the database:", err);
+          release(); // Release the client
+          reject(err);
+          return;
+        }
+  
+        // Check if the user email already exists
+        client.query("SELECT * FROM transactions", (err, result) => {
+          if (err) {
+            release(); // Release the client
+            console.error("Error checking products:", err);
+            reject(err);
+            return;
+          }
+  
+          if (result.rows.length > 0) {
+            release();
+            resolve(result.rows);
+          } else {
+            release(); // Release the client
+            reject(new Error("Product not found"));
+          }
+        });
+      });
+    });
+  };
+
 module.exports = {
   pool,
   addUser,
@@ -318,4 +377,6 @@ module.exports = {
   fetchProducts,
   deleteProduct,
   updateProduct,
+  addTransaction,
+  fetchTransactions
 };

@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-function DashboardScreen({ onLogout }) {
+import { Modal, Button, Form } from "react-bootstrap";
+import { fetchTransactionsRequest } from "../services/TransactionService";
+
+function TransactionScreen({ onLogout }) {
   const navigate = useNavigate();
+  const [transactions, setTransactions] = useState([]);
   const handleLogout = () => {
     sessionStorage.clear();
     sessionStorage.setItem("isLoggedIn", false);
@@ -15,17 +19,32 @@ function DashboardScreen({ onLogout }) {
     onLogout();
     window.location.href = "/";
   };
+  const reload = () => {
+    fetchTransactionsRequest()
+      .then((response) => {
+        if (!response.ok) {
+          setTransactions([]);
+          return;
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setTransactions(data);
+      })
+      .catch((error) => {
+        setTransactions([]);
+        return;
+      });
+  };
 
-  const openInventory = () => {
-    navigate("/inventory");
-  };
-  const openPos = () => {
-    navigate("/pos");
-  };
+  useEffect(() => {
+    reload();
+  }, []);
+
   return (
     <div>
       {/* ***** Header Area Start ***** */}
-      <header className="header-area header-sticky">
+      <header className="header-area background-header">
         <div className="container">
           <div className="row">
             <div className="col-12">
@@ -38,17 +57,32 @@ function DashboardScreen({ onLogout }) {
                 {/* ***** Menu Start ***** */}
                 <ul className="nav">
                   <li className="scroll-to-section">
-                    <a href="/" className="active">
+                    <a
+                      href="#home"
+                      onClick={() => {
+                        navigate("/dashboard");
+                      }}
+                    >
                       Home
                     </a>
                   </li>
                   <li className="scroll-to-section">
-                    <a href="#openPos" onClick={openPos}>
+                    <a
+                      href="#pos"
+                      onClick={() => {
+                        navigate("/pos");
+                      }}
+                    >
                       POS
                     </a>
                   </li>
                   <li className="scroll-to-section">
-                    <a href="#inventory" onClick={openInventory}>
+                    <a
+                      href="#inventory"
+                      onClick={() => {
+                        navigate("/inventory");
+                      }}
+                    >
                       Inventory
                     </a>
                   </li>
@@ -58,6 +92,7 @@ function DashboardScreen({ onLogout }) {
                       onClick={() => {
                         navigate("/transactions");
                       }}
+                      className="active"
                     >
                       Transactions
                     </a>
@@ -75,45 +110,43 @@ function DashboardScreen({ onLogout }) {
         </div>
       </header>
       {/* ***** Header Area End ***** */}
-
-      {/* ***** Welcome Area Start ***** */}
-      <div className="welcome-area" id="welcome">
-        {/* ***** Header Text Start ***** */}
-        <div className="header-text">
-          <div className="container">
-            <div className="row">
-              <div
-                className="left-text col-lg-6 col-md-6 col-sm-12 col-xs-12"
-                data-scroll-reveal="enter left move 30px over 0.6s after 0.4s"
-              >
-                <h2>
-                  Brew, Track, and Thrive with <strong>CofeeMan</strong>
-                </h2>
-                <p>
-                  Elevate your coffee business to new heights with CofeeMan's
-                  intuitive features and robust performance. Start your journey
-                  towards efficiency and excellence today!
-                </p>
-                <a href="#data" className="main-button-slider">
-                  Sign Up
-                </a>
+      <section className="section" id="about2">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-12">
+              <div className="section-title mb-2">
+                <h1 className="display-5 mb-0">Transactions Table</h1>
               </div>
-              <div
-                className="col-lg-6 col-md-6 col-sm-12 col-xs-12"
-                data-scroll-reveal="enter right move 30px over 0.6s after 0.4s"
-              >
-                <img
-                  src="assets/images/slider-icon.png"
-                  className="rounded img-fluid d-block mx-auto"
-                  alt="First Vector Graphic"
-                />
+              <div className="table-responsive mb-5">
+                <table className="table border mb-0" id="sortTable">
+                  <thead className="table-light fw-semibold">
+                    <tr className="align-middle">
+                      <th className="text-center">Product Name</th>
+                      <th>Product Price</th>
+                      <th className="text-center">Category</th>
+                      <th>Stock</th>
+                      <th className="text-center">Registered Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {transactions.map((transaction, index) => (
+                      <tr key={index}>
+                        <td className="text-center">{transaction.items}</td>
+                        <td>{transaction.total}</td>
+                        <td className="text-center">{transaction.cash}</td>
+                        <td>{transaction.change_amount}</td>
+                        <td className="text-center">
+                          {transaction.transaction_date}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
         </div>
-        {/* ***** Header Text End ***** */}
-      </div>
-      {/* ***** Welcome Area End ***** */}
+      </section>
       {/* ***** Features Big Item End ***** */}
 
       {/* ***** Footer Start ***** */}
@@ -162,4 +195,4 @@ function DashboardScreen({ onLogout }) {
   );
 }
 
-export default DashboardScreen;
+export default TransactionScreen;
