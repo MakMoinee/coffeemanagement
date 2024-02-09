@@ -2,13 +2,24 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="icon" href="%PUBLIC_URL%/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta
       name="description"
-      content="Web site created using create-react-app"
-    />
+      content="Web site created using create-react-app" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900"
+      rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css"
+      href="%PUBLIC_URL%/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css"
+      href="%PUBLIC_URL%/assets/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css"
+      href="%PUBLIC_URL%/assets/css/templatemo-art-factory.css">
+    <link rel="stylesheet" type="text/css"
+      href="%PUBLIC_URL%/assets/css/owl-carousel.css">
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
@@ -24,7 +35,37 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
+    <title>CoffeeMan</title>
+
+    <style>
+      #preloader{
+        background-image: linear-gradient(145deg, #c68100 0%, #b88700a6 100%) !important;
+      }
+      .header-area.header-sticky .nav li a.active {
+        color: #000000 !important;
+      }
+      .header-area .main-nav .nav li:hover a {
+        color: #000000 !important;
+      }
+      .background-header{
+        background-color: #c68100 !important;
+      }
+      .header-area.header-sticky.background-header .nav li a {
+        color: #ffffff !important;
+      }
+      .header-area.background-header .nav li a {
+        color: #ffffff !important;
+      }
+      .header-area.header-sticky.background-header .nav li a.active {
+        color: #000000 !important;
+      }
+      .header-area.background-header .nav li a.active {
+        color: #000000 !important;
+      }
+      .logo{
+        color: #ffffff !important;
+      }
+    </style>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -39,5 +80,21 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+    <!-- jQuery -->
+    <script src="%PUBLIC_URL%/assets/js/jquery-2.1.0.min.js"></script>
+
+    <!-- Bootstrap -->
+    <script src="%PUBLIC_URL%/assets/js/popper.js"></script>
+    <script src="%PUBLIC_URL%/assets/js/bootstrap.min.js"></script>
+
+    <!-- Plugins -->
+    <script src="%PUBLIC_URL%/assets/js/owl-carousel.js"></script>
+    <script src="%PUBLIC_URL%/assets/js/scrollreveal.min.js"></script>
+    <script src="%PUBLIC_URL%/assets/js/waypoints.min.js"></script>
+    <script src="%PUBLIC_URL%/assets/js/jquery.counterup.min.js"></script>
+    <script src="%PUBLIC_URL%/assets/js/imgfix.min.js"></script>
+
+    <!-- Global Init -->
+    <script src="%PUBLIC_URL%/assets/js/custom.js"></script>
   </body>
 </html>

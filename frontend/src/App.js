@@ -1,24 +1,66 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import LandingScreen from "./Screens/LandingScreen";
+import DashboardScreen from "./Screens/DashboardScreen";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import InventoryScreen from "./Screens/InventoryScreen";
 
 function App() {
+  const initialLoginStatus = localStorage.getItem("isLoggedIn") === "true"; // Corrected the comparison
+  const [isLoggedIn, setIsLoggedIn] = useState(initialLoginStatus);
+
+  // Update localStorage when login status changes
+  useEffect(() => {
+    localStorage.setItem("isLoggedIn", isLoggedIn);
+  }, [isLoggedIn]);
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            isLoggedIn ? (
+              <Navigate to="/dashboard" />
+            ) : (
+              <LandingScreen onLogin={handleLogin} />
+            )
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            isLoggedIn ? (
+              <DashboardScreen onLogout={handleLogout} />
+            ) : (
+              <Navigate to="/" />
+            )
+          }
+        />
+        <Route
+          path="/inventory"
+          element={
+            isLoggedIn ? (
+              <InventoryScreen onLogout={handleLogout} />
+            ) : (
+              <Navigate to="/" />
+            )
+          }
+        />
+      </Routes>
+    </Router>
   );
 }
 
