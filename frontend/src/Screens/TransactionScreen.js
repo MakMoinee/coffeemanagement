@@ -7,10 +7,12 @@ import { fetchTransactionsRequest } from "../services/TransactionService";
 function TransactionScreen({ onLogout }) {
   const navigate = useNavigate();
   const [transactions, setTransactions] = useState([]);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+
   const handleLogout = () => {
     sessionStorage.clear();
     sessionStorage.setItem("isLoggedIn", false);
-    // onLogout();
     Swal.fire({
       icon: "success",
       title: "Successfully Logout",
@@ -19,7 +21,8 @@ function TransactionScreen({ onLogout }) {
     onLogout();
     window.location.href = "/";
   };
-  const reload = () => {
+
+  useEffect(() => {
     fetchTransactionsRequest()
       .then((response) => {
         if (!response.ok) {
@@ -35,11 +38,17 @@ function TransactionScreen({ onLogout }) {
         setTransactions([]);
         return;
       });
-  };
-
-  useEffect(() => {
-    reload();
   }, []);
+
+  const filteredTransactions = transactions.filter((transaction) => {
+    if (startDate && endDate) {
+      return (
+        transaction.transaction_date >= startDate &&
+        transaction.transaction_date <= endDate
+      );
+    }
+    return true;
+  });
 
   return (
     <div>
@@ -118,6 +127,23 @@ function TransactionScreen({ onLogout }) {
                 <h1 className="display-5 mb-0">Transactions Table</h1>
               </div>
               <div className="table-responsive mb-5">
+                <div className="row mb-3">
+                  <div className="col">
+                  <label for="">From:</label>
+                    <input
+                      type="date"
+                      value={startDate}
+                      onChange={(e) => setStartDate(e.target.value)}
+                    />
+                    &nbsp;&nbsp;
+                    <label for="">To:</label>
+                    <input
+                      type="date"
+                      value={endDate}
+                      onChange={(e) => setEndDate(e.target.value)}
+                    />
+                  </div>
+                </div>
                 <table className="table border mb-0" id="sortTable">
                   <thead className="table-light fw-semibold">
                     <tr className="align-middle">
@@ -129,7 +155,7 @@ function TransactionScreen({ onLogout }) {
                     </tr>
                   </thead>
                   <tbody>
-                    {transactions.map((transaction, index) => (
+                    {filteredTransactions.map((transaction, index) => (
                       <tr key={index}>
                         <td className="text-center">{transaction.items}</td>
                         <td>{transaction.total}</td>

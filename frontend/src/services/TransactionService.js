@@ -32,7 +32,7 @@ const sendAddTransactionRequest = (productNames, totalAmount, cash, change) => {
   });
 };
 
-const fetchTransactionsRequest = (email, password) => {
+const fetchTransactionsRequest = (startDate, endDate) => {
   return new Promise((resolve, reject) => {
     fetch(defaultData.transURL, {
       method: "GET",
